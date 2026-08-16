@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Instrument_Serif, Meow_Script } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-instrument-serif",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const meowScript = Meow_Script({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-meow-script",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
 });
 
 export const metadata: Metadata = {
@@ -24,10 +31,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="de"
+      className={`${instrumentSerif.variable} ${meowScript.variable} ${geist.variable} h-full scroll-smooth bg-background antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="relative flex min-h-full flex-col overflow-x-hidden bg-background">
+        <main className="space-y-4 sm:space-y-24">{children}</main>
+      </body>
     </html>
   );
 }
