@@ -22,15 +22,6 @@ export async function sendContactForm(
   const allergensDescription = formData.get("form-allergens-description");
   const hasSleepoverInterest = formData.get("form-sleepover") === "on";
 
-  console.log(
-    formData,
-    guestCount,
-    guestNames,
-    hasAllergens,
-    allergensNames,
-    allergensDescription,
-  );
-
   if (!guestCount || !guestNames) {
     return { status: "error", message: "💆‍♂️ Bitte fülle alle Felder aus." };
   }
@@ -48,7 +39,7 @@ export async function sendContactForm(
       from: "Hochzeitsgast RSVP <onboarding@resend.dev>",
       to: RECIPIENT_EMAIL,
       subject: `Neue Nachricht von ${guestNames}`,
-      text: `Gastanzahl: ${guestCount}\nName(n): ${guestNames}\nAllergene: ${hasAllergens ? "Ja" : "Nein"}\nWer hat Allergene?: ${allergensNames}\nWas für Allergene?: ${allergensNames}\nAllergene Beschreibung: ${allergensDescription}\nInteresse an einer Übernachtungsmöglichkeit: ${hasSleepoverInterest}`,
+      text: `Gastanzahl: ${guestCount}\nName(n): ${guestNames}\nAllergene: ${hasAllergens ? "Ja" : "Nein"}\nWer hat Allergene?: ${allergensNames}\nWas für Allergene?: ${allergensDescription}\nInteresse an einer Übernachtungsmöglichkeit: ${hasSleepoverInterest ? "Ja" : "Nein"}`,
     });
 
     if (error) {
