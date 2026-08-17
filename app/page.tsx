@@ -128,7 +128,7 @@ export default function Home() {
                 alt="Alperie Outdoor 2"
                 width={500}
                 height={800}
-                className="relative z-10 -mt-32 h-96 w-auto lg:-ml-8"
+                className="relative z-10 -mt-32 w-[90%] sm:-ml-8 sm:h-96 sm:w-auto"
               />
             </div>
 

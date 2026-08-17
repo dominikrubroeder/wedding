@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${instrumentSerif.variable} ${meowScript.variable} ${geist.variable} h-full scroll-smooth antialiased`}
+      className={`${instrumentSerif.variable} ${meowScript.variable} ${geist.variable} h-full overflow-x-hidden scroll-smooth antialiased`}
     >
       <body className="relative flex min-h-full flex-col overflow-x-hidden">
         <Image
@@ -43,7 +43,7 @@ export default function RootLayout({
           width={500}
           height={500}
           alt="Eucalyptus"
-          className="absolute -top-72 -right-44 w-auto lg:-top-56 lg:-right-40 xl:-top-44 xl:-right-16"
+          className="absolute -top-36 -right-44 h-auto w-[20rem] shrink-0 xs:-top-32 md:w-[24rem] lg:-top-44 lg:-right-24 lg:w-120"
           loading="eager"
           draggable={false}
         />
@@ -73,7 +73,7 @@ export default function RootLayout({
             width={500}
             height={500}
             alt="Eucalyptus"
-            className="absolute -bottom-64 -left-44 w-auto"
+            className="absolute -bottom-24 -left-48 w-[20rem] xxs:-left-44 md:w-[24rem] lg:-bottom-32 lg:w-120"
             draggable={false}
           />
         </footer>

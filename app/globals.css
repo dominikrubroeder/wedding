@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+    --breakpoint-xxs: 23.75rem;
+    --breakpoint-xs: 30rem;
+}
+
 @theme inline {
     --color-background: var(--cream);
     --color-foreground: var(--bark);
