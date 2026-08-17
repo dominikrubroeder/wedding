@@ -16,10 +16,23 @@ export async function sendContactForm(
   formData: FormData,
 ): Promise<ContactFormState> {
   const guestCount = Number(formData.get("form-guest-count") ?? 0);
-  const name = String(formData.get("form-name") ?? "").trim();
+  const guestNames = String(formData.get("form-names") ?? "").trim();
+  const hasAllergens = formData.get("form-allergens") === "on";
+  const allergensNames = formData.get("form-allergens-names");
+  const allergensDescription = formData.get("form-allergens-description");
+  const hasSleepoverInterest = formData.get("form-sleepover") === "on";
 
-  if (!guestCount || !name) {
-    return { status: "error", message: "Bitte fülle alle Felder aus." };
+  console.log(
+    formData,
+    guestCount,
+    guestNames,
+    hasAllergens,
+    allergensNames,
+    allergensDescription,
+  );
+
+  if (!guestCount || !guestNames) {
+    return { status: "error", message: "💆‍♂️ Bitte fülle alle Felder aus." };
   }
 
   if (!process.env.RESEND_API_KEY) {
@@ -32,14 +45,15 @@ export async function sendContactForm(
   try {
     const { error } = await resend.emails.send({
       // "from" muss eine auf deiner Resend-Domain verifizierte Adresse sein.
-      from: "Kontaktformular <onboarding@resend.dev>",
+      from: "Hochzeitsgast RSVP <onboarding@resend.dev>",
       to: RECIPIENT_EMAIL,
-      subject: `Neue Nachricht von ${name}`,
-      text: `Gastanzahl: ${guestCount}\nName(n): ${name}`,
+      subject: `Neue Nachricht von ${guestNames}`,
+      text: `Gastanzahl: ${guestCount}\nName(n): ${guestNames}\nAllergene: ${hasAllergens ? "Ja" : "Nein"}\nWer hat Allergene?: ${allergensNames}\nWas für Allergene?: ${allergensNames}\nAllergene Beschreibung: ${allergensDescription}\nInteresse an einer Übernachtungsmöglichkeit: ${hasSleepoverInterest}`,
     });
 
     if (error) {
       console.log("[v0] Resend error:", error);
+
       return {
         status: "error",
         message: "Die Nachricht konnte nicht gesendet werden.",
@@ -48,13 +62,20 @@ export async function sendContactForm(
 
     return {
       status: "success",
-      message: "Danke! Deine Nachricht wurde gesendet.",
+      message:
+        guestCount === 1
+          ? "Danke! Wir freuen uns auf dich 🫶."
+          : guestCount === 2
+            ? "Danke! Wir freuen uns auf euch 🫶."
+            : "Danke, dass uns Bescheid gegeben hast 🫶.",
     };
   } catch (err) {
-    console.log("[v0] Unexpected error sending email:", err);
+    console.log("Unexpected error sending RSVP email:", err);
+
     return {
       status: "error",
-      message: "Es ist ein unerwarteter Fehler aufgetreten.",
+      message:
+        "Das hat leider nicht geklappt – wir sind dran, du musst nichts weiteres machen.",
     };
   }
 }

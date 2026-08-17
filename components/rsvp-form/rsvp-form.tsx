@@ -32,7 +32,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" size="lg" className="w-full" disabled={pending}>
+    <Button type="submit" className="w-full" disabled={pending}>
       {pending ? (
         <>
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
@@ -41,7 +41,7 @@ function SubmitButton() {
       ) : (
         <>
           <Mail className="size-4" aria-hidden="true" />
-          Abschicken, los geht&apos;s
+          Abschicken
         </>
       )}
     </Button>
@@ -49,14 +49,17 @@ function SubmitButton() {
 }
 
 export function RsvpForm() {
-  const [state, formAction] = useActionState(sendContactForm, initialState);
+  const [state, formAction, isPending] = useActionState(
+    sendContactForm,
+    initialState,
+  );
   const [allergensChecked, setAllergensChecked] = useState(false);
   const [roomsChecked, setRoomsChecked] = useState(false);
 
   const rsvpOptions = [
-    { label: "Ich komme", value: "one-person" },
-    { label: "Wir kommen zu zweit", value: "two-persons" },
-    { label: "Ich/wir können nicht kommen", value: "none" },
+    { label: "Ich komme", value: "1" },
+    { label: "Wir kommen zu zweit", value: "2" },
+    { label: "Ich/wir können nicht kommen", value: "0" },
   ];
 
   return (
@@ -70,9 +73,11 @@ export function RsvpForm() {
           <FieldLabel htmlFor="form-guest-count">Lass uns wissen</FieldLabel>
           <Select
             items={rsvpOptions}
-            defaultValue="one-person"
+            defaultValue="1"
+            name="form-guest-count"
             id="form-guest-count"
             required
+            disabled={isPending}
           >
             <SelectTrigger>
               <SelectValue />
@@ -91,11 +96,13 @@ export function RsvpForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="form-name">Name(n)</FieldLabel>
+          <FieldLabel htmlFor="form-names">Name(n)</FieldLabel>
           <Input
-            id="form-name"
+            name="form-names"
+            id="form-names"
             type="text"
             placeholder="Madlen, Dominik oder Madlen und Dominik ..."
+            disabled={isPending}
           />
           <FieldDescription>
             Du/ihr könnt eure Namen einfach kommagetrennt eintragen
@@ -106,7 +113,9 @@ export function RsvpForm() {
           <Checkbox
             checked={allergensChecked}
             onCheckedChange={setAllergensChecked}
+            name="form-allergens"
             id="form-allergens"
+            disabled={isPending}
           />
           <FieldContent>
             <FieldLabel htmlFor="form-allergens" className="text-base">
@@ -118,11 +127,13 @@ export function RsvpForm() {
         {allergensChecked && (
           <>
             <Field>
-              <FieldLabel htmlFor="form-allergens-name">Wer?</FieldLabel>
+              <FieldLabel htmlFor="form-allergens-names">Wer?</FieldLabel>
               <Input
-                id="form-allergens-name"
+                name="form-allergens-names"
+                id="form-allergens-names"
                 type="text"
                 placeholder="Madlen, Dominik ..."
+                disabled={isPending}
               />
             </Field>
 
@@ -131,9 +142,11 @@ export function RsvpForm() {
                 Lass uns wissen, auf was wir achten sollen
               </FieldLabel>
               <Input
+                name="form-allergens-description"
                 id="form-allergens-description"
                 type="text"
                 placeholder="Laktose, ..."
+                disabled={isPending}
               />
             </Field>
           </>
@@ -143,7 +156,9 @@ export function RsvpForm() {
           <Checkbox
             checked={roomsChecked}
             onCheckedChange={setRoomsChecked}
+            name="form-sleepover"
             id="form-sleepover"
+            disabled={isPending}
           />
           <FieldContent>
             <FieldLabel htmlFor="form-sleepover" className="text-base">
@@ -162,12 +177,9 @@ export function RsvpForm() {
         {state.status === "success" && (
           <p
             role="status"
-            className="flex items-center gap-2 text-sm text-foreground"
+            className="flex items-center justify-center gap-2 text-sm text-forest"
           >
-            <CheckCircle2
-              className="size-4 shrink-0 text-primary"
-              aria-hidden="true"
-            />
+            <CheckCircle2 className="size-4 shrink-0" aria-hidden="true" />
             {state.message}
           </p>
         )}

@@ -1,22 +1,22 @@
 import { Animate } from "@/components/ui/animate";
-import { Countdown } from "@/components/ui/countdown";
 import Image from "next/image";
 import { RsvpForm } from "@/components/rsvp-form/rsvp-form";
 import { HeartIcon, MapPin } from "lucide-react";
 import Link from "next/link";
+import { Dash } from "@/components/ui/dash";
 
 export default function Home() {
   return (
     <>
       <Animate delay={0.44} className="space-y-4 pt-4">
-        <h1 className="text-md text-center uppercase">
+        <h1 className="text-md relative z-10 text-center uppercase">
           Save <span className="font-handwritten lowercase">the</span> date | 14
           | 05 | 2027
         </h1>
         <h2>Better together</h2>
 
         <section
-          className="mx-auto grid w-full max-w-full grid-cols-[1fr_2fr_1fr] justify-center gap-4 px-4 sm:gap-8 xl:px-0"
+          className="mx-auto w-full max-w-full justify-center px-4 sm:grid sm:grid-cols-[1fr_2fr_1fr] sm:gap-4 sm:gap-8 xl:px-0"
           id="gallery"
         >
           <Image
@@ -24,7 +24,7 @@ export default function Home() {
             alt="Wir wandern"
             width={500}
             height={500}
-            className="my-auto"
+            className="mb-4 w-full sm:my-auto"
             loading="eager"
           />
 
@@ -66,7 +66,7 @@ export default function Home() {
             alt="Domi Strandweg"
             width={500}
             height={800}
-            className="my-auto"
+            className="mt-4 w-full sm:my-auto"
             loading="eager"
           />
         </section>
@@ -101,8 +101,9 @@ export default function Home() {
         >
           <div className="space-y-2">
             <h2>Wir laden euch herzlich ein</h2>
-            <div className="text-center">
-              zu unserer Hochzeit – Madlen & Dominik
+            <div className="flex items-center justify-center gap-2.5">
+              <span>zu unserer Hochzeit</span> <Dash />
+              <span>Madlen & Dominik</span>
             </div>
           </div>
           <RsvpForm />
@@ -117,7 +118,7 @@ export default function Home() {
           <h2>Die Location</h2>
 
           <div className="space-y-8 rounded border p-11">
-            <div className="flex flex-col items-center lg:flex-row">
+            <div className="relative flex flex-col items-center lg:flex-row">
               <Image
                 src="/alperie-outdoor.jpeg"
                 alt="Alperie Outdoor"
@@ -138,7 +139,7 @@ export default function Home() {
                 <MapPin className="text-sage" />
                 <span className="flex items-center gap-3">
                   <span>Anfahrt</span>
-                  <span className="h-px w-6 bg-border" />
+                  <Dash />
                   <span className="font-body text-base font-normal">
                     Freie Trauung in:
                   </span>
@@ -166,7 +167,7 @@ export default function Home() {
         >
           <h2>Dress Code</h2>
 
-          <div className="rounded border p-11">
+          <div className="space-y-6 rounded border p-11">
             <div className="flex items-center justify-center gap-0">
               <div className="flex h-64 flex-2 items-center justify-center rounded border">
                 Image
@@ -177,6 +178,10 @@ export default function Home() {
               <div className="flex h-64 flex-2 items-center justify-center rounded border">
                 Image
               </div>
+            </div>
+
+            <div className="mx-auto text-center">
+              Zieht an was euch gefällt, das Motto lautet: Garden Party
             </div>
           </div>
         </section>
@@ -197,19 +202,6 @@ export default function Home() {
           id="seating"
         >
           <h2>Sitzordnung</h2>
-        </section>
-      </Animate>
-
-      <Animate delay={0.56}>
-        <section className="mx-auto flex max-w-3xl justify-center px-4 xl:px-0">
-          <Countdown
-            target="2027-05-14"
-            completedContent={
-              <p className="text-lg font-medium text-foreground">
-                Let's get married.
-              </p>
-            }
-          />
         </section>
       </Animate>
     </>
