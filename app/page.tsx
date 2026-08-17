@@ -1,7 +1,7 @@
 import { Animate } from "@/components/ui/animate";
 import Image from "next/image";
 import { RsvpForm } from "@/components/rsvp-form/rsvp-form";
-import { HeartIcon, MapPin } from "lucide-react";
+import { HeartIcon, MapPin, Sun } from "lucide-react";
 import Link from "next/link";
 import { Dash } from "@/components/ui/dash";
 
@@ -20,8 +20,8 @@ export default function Home() {
           id="gallery"
         >
           <Image
-            src="/wir-wandern.jpeg"
-            alt="Wir wandern"
+            src="/wir-portugal-strandcafe.jpeg"
+            alt="Wir Portugal Strandcafe"
             width={500}
             height={500}
             className="mb-4 w-full sm:my-auto"
@@ -62,8 +62,8 @@ export default function Home() {
           </div>
 
           <Image
-            src="/domi-strandweg.jpeg"
-            alt="Domi Strandweg"
+            src="/wir-seehaus.jpeg"
+            alt="Wir Seehaus"
             width={500}
             height={800}
             className="mt-4 w-full sm:my-auto"
@@ -87,8 +87,6 @@ export default function Home() {
               <li>
                 <a href="#dress-code">Dresscode</a>
               </li>
-              <li>Ablauf</li>
-              <li>Sitzordnung</li>
             </ul>
           </nav>
         </div>
@@ -139,22 +137,23 @@ export default function Home() {
                 <MapPin className="text-sage" />
                 <span className="flex items-center gap-3">
                   <span>Anfahrt</span>
-                  <Dash />
-                  <span className="font-body text-base font-normal">
-                    Freie Trauung in:
-                  </span>
                 </span>
               </h3>
 
-              <Link
-                href="https://maps.app.goo.gl/Hm6rLsGk9PwQtwdT7"
-                target="_blank"
-                className="w-auto hover:underline"
-              >
-                <div>Die Alperie</div>
-                <div>Neuhauser Str. 45</div>
-                <div>83737 Schliersee</div>
-              </Link>
+              <div>
+                <div className="font-body text-base font-normal">
+                  Freie Trauung in:
+                </div>
+                <Link
+                  href="https://maps.app.goo.gl/Hm6rLsGk9PwQtwdT7"
+                  target="_blank"
+                  className="w-auto hover:underline"
+                >
+                  <div>Die Alperie</div>
+                  <div>Neuhauser Str. 45</div>
+                  <div>83737 Schliersee</div>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -162,46 +161,14 @@ export default function Home() {
 
       <Animate>
         <section
-          className="mx-auto h-144 w-full max-w-5xl scroll-mt-52 space-y-6 px-4 xl:px-0"
+          className="mx-auto w-full max-w-5xl scroll-mt-52 space-y-6 px-4 xl:px-0"
           id="dress-code"
         >
           <h2>Dress Code</h2>
 
-          <div className="space-y-6 rounded border p-11">
-            <div className="flex items-center justify-center gap-0">
-              <div className="flex h-64 flex-2 items-center justify-center rounded border">
-                Image
-              </div>
-              <div className="z-10 -mx-4 flex h-96 flex-3 items-center justify-center rounded border bg-background">
-                Image
-              </div>
-              <div className="flex h-64 flex-2 items-center justify-center rounded border">
-                Image
-              </div>
-            </div>
-
-            <div className="mx-auto text-center">
-              Zieht an was euch gefällt, das Motto lautet: Garden Party
-            </div>
+          <div className="flex items-center justify-center gap-4 space-y-6 rounded border p-11 text-center">
+            <Sun className="text-sage" /> Sommerlich, lässig, schick
           </div>
-        </section>
-      </Animate>
-
-      <Animate>
-        <section
-          className="mx-auto flex h-144 w-full max-w-3xl items-center justify-center rounded border px-4 xl:px-0"
-          id="schedule"
-        >
-          <h2>Ablauf</h2>
-        </section>
-      </Animate>
-
-      <Animate>
-        <section
-          className="mx-auto flex h-144 w-full max-w-3xl items-center justify-center rounded border px-4 xl:px-0"
-          id="seating"
-        >
-          <h2>Sitzordnung</h2>
         </section>
       </Animate>
     </>

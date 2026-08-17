@@ -58,7 +58,7 @@ export function RsvpForm() {
 
   const rsvpOptions = [
     { label: "Ich komme", value: "1" },
-    { label: "Wir kommen zu zweit", value: "2" },
+    { label: "Wir kommen", value: "2" },
     { label: "Ich/wir können nicht kommen", value: "0" },
   ];
 
