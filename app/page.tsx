@@ -72,7 +72,7 @@ export default function Home() {
         </section>
       </Animate>
 
-      <section className="sticky top-0 z-250 bg-background px-4 xl:px-0">
+      <section className="bg-background px-4 xl:px-0">
         <div className="mx-auto max-w-3xl space-y-4 border-y py-6">
           <HeartIcon className="mx-auto text-sage" />
 
@@ -94,7 +94,7 @@ export default function Home() {
 
       <Animate delay={0.56}>
         <section
-          className="mx-auto w-full max-w-3xl scroll-mt-52 items-center justify-center gap-8 space-y-6 px-4 xl:px-0"
+          className="mx-auto w-full max-w-3xl scroll-mt-16 items-center justify-center gap-8 space-y-6 px-4 xl:px-0"
           id="rsvp"
         >
           <div className="space-y-2">
@@ -110,7 +110,7 @@ export default function Home() {
 
       <Animate>
         <section
-          className="mx-auto w-full max-w-5xl scroll-mt-52 space-y-10 rounded px-4 xl:px-0"
+          className="mx-auto w-full max-w-5xl scroll-mt-16 space-y-10 rounded px-4 xl:px-0"
           id="location"
         >
           <h2>Die Location</h2>
@@ -161,7 +161,7 @@ export default function Home() {
 
       <Animate>
         <section
-          className="mx-auto w-full max-w-5xl scroll-mt-52 space-y-6 px-4 xl:px-0"
+          className="mx-auto w-full max-w-5xl scroll-mt-16 space-y-6 px-4 xl:px-0"
           id="dress-code"
         >
           <h2>Dress Code</h2>

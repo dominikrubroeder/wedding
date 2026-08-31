@@ -15,14 +15,15 @@ export async function sendContactForm(
   _prevState: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
-  const guestCount = Number(formData.get("form-guest-count") ?? 0);
+  const guestCount = Number(formData.get("form-guest-count"));
+  const confirmation = !(guestCount < 0 || guestCount === 0);
   const guestNames = String(formData.get("form-names") ?? "").trim();
   const hasAllergens = formData.get("form-allergens") === "on";
   const allergensNames = formData.get("form-allergens-names");
   const allergensDescription = formData.get("form-allergens-description");
   const hasSleepoverInterest = formData.get("form-sleepover") === "on";
 
-  if (!guestCount || !guestNames) {
+  if (guestCount < 0 || guestCount > 2) {
     return { status: "error", message: "💆‍♂️ Bitte fülle alle Felder aus." };
   }
 
@@ -39,7 +40,7 @@ export async function sendContactForm(
       from: "Hochzeitsgast RSVP <onboarding@resend.dev>",
       to: RECIPIENT_EMAIL,
       subject: `Neue Nachricht von ${guestNames}`,
-      text: `Gastanzahl: ${guestCount}\nName(n): ${guestNames}\nAllergene: ${hasAllergens ? "Ja" : "Nein"}\nWer hat Allergene?: ${allergensNames}\nWas für Allergene?: ${allergensDescription}\nInteresse an einer Übernachtungsmöglichkeit: ${hasSleepoverInterest ? "Ja" : "Nein"}`,
+      text: `Zusage: ${confirmation ? "Ja" : "Nein"}\nGastanzahl: ${guestCount}\nName(n): ${guestNames}\nAllergene: ${hasAllergens ? "Ja" : "Nein"}\nWer hat Allergene?: ${allergensNames || "-"}\nWas für Allergene?: ${allergensDescription || "-"}\nInteresse an einer Übernachtungsmöglichkeit: ${hasSleepoverInterest ? "Ja" : "Nein"}`,
     });
 
     if (error) {
@@ -58,7 +59,7 @@ export async function sendContactForm(
           ? "Danke! Wir freuen uns auf dich 🫶."
           : guestCount === 2
             ? "Danke! Wir freuen uns auf euch 🫶."
-            : "Danke, dass uns Bescheid gegeben hast 🫶.",
+            : "Danke, dass du uns Bescheid gegeben hast 🫶.",
     };
   } catch (err) {
     console.log("Unexpected error sending RSVP email:", err);
