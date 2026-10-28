@@ -56,7 +56,7 @@ export default function RootLayout({
               target="2027-05-14"
               completedContent={
                 <p className="text-lg font-medium text-foreground">
-                  Let&#39;s get married.
+                  Heute heiraten wir!
                 </p>
               }
               className="mx-auto justify-center"
