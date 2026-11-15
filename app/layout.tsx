@@ -53,7 +53,7 @@ export default function RootLayout({
         <footer className="relative space-y-8 overflow-hidden pt-16 pb-6 text-center">
           <Animate delay={0.16}>
             <Countdown
-              target="2027-05-14"
+              target="2027-05-14T14:30"
               completedContent={
                 <p className="text-lg font-medium text-foreground">
                   Heute heiraten wir!
