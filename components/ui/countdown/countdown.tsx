@@ -6,7 +6,7 @@ import { useCountdown } from "@/components/ui/countdown/use-countdown";
 export interface CountdownProps {
   /**
    * The date/time to count down to. Accepts a plain date-string like
-   * "2027-05-14" (parsed as midnight in `timeZone`), any ISO string, a Date,
+   * "2027-05-14T14:30" (wall-clock time in `timeZone`; date only = midnight), any ISO string, a Date,
    * or a timestamp.
    */
   target: string | Date | number;
@@ -44,7 +44,7 @@ export function Countdown({
   hideUnits = [],
   className,
 }: CountdownProps) {
-  const { days, hours, minutes, seconds, isComplete } = useCountdown(target, {
+  const { days, hours, minutes, seconds, isComplete, isReady } = useCountdown(target, {
     onComplete,
     timeZone,
   });
@@ -71,7 +71,9 @@ export function Countdown({
           hydration for a live-ticking countdown, so we suppress the expected
           hydration warning rather than the underlying value. */}
       <span className="sr-only" suppressHydrationWarning>
-        {isComplete
+        {!isReady
+          ? "Countdown wird geladen"
+          : isComplete
           ? "Der Countdown ist abgelaufen"
           : `Noch ${units
               .map((unit) => `${unit.value} ${unitLabel(unit.key, unit.value)}`)
@@ -91,7 +93,7 @@ export function Countdown({
             suppressHydrationWarning
             className="font-instrument-serif text-4xl leading-none text-foreground tabular-nums xs:text-5xl"
           >
-            {pad(unit.value)}
+            {isReady ? pad(unit.value) : "--"}
           </span>
           <span className="text-sm text-foreground/70">
             {unitLabel(unit.key, unit.value)}

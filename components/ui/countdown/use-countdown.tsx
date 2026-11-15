@@ -27,8 +27,8 @@ function getTimeParts(msRemaining: number): CountdownTimeParts {
   }
 }
 
-/** Matches a plain date-string like "2027-05-14" (no time/timezone). */
-const DATE_STRING_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+/** Matches a zone-less string like "2027-05-14" or "2027-05-14T14:30[:00]". */
+const DATE_STRING_PATTERN = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}))?)?$/
 
 export const DEFAULT_TIME_ZONE = 'Europe/Berlin'
 
@@ -53,14 +53,18 @@ function getTimeZoneOffsetMs(instantMs: number, timeZone: string): number {
 /**
  * Resolves a countdown target into a timestamp.
  *
- * Plain date-strings ("2027-05-14") are parsed as midnight in `timeZone`, so
+ * Zone-less strings ("2027-05-14", "2027-05-14T14:30") are parsed as wall-clock time in `timeZone`, so
  * the server and every viewer count down to the same instant regardless of
  * their own timezone.
  */
 function resolveTargetMs(target: string | Date | number, timeZone: string): number {
   if (typeof target === 'string' && DATE_STRING_PATTERN.test(target)) {
-    const [year, month, day] = target.split('-').map(Number)
-    const wallClockAsUtc = Date.UTC(year, month - 1, day)
+    const [year, month, day, hour = 0, minute = 0, second = 0] = (
+      DATE_STRING_PATTERN.exec(target) as RegExpExecArray
+    )
+      .slice(1)
+      .map((part) => (part === undefined ? 0 : Number(part)))
+    const wallClockAsUtc = Date.UTC(year, month - 1, day, hour, minute, second)
     // Re-check the offset at the first result in case a DST change falls
     // between the guess and the real instant.
     const firstGuess = wallClockAsUtc - getTimeZoneOffsetMs(wallClockAsUtc, timeZone)
@@ -71,17 +75,35 @@ function resolveTargetMs(target: string | Date | number, timeZone: string): numb
 
 function subscribeToSecondTicks(onTick: () => void) {
   const interval = setInterval(onTick, 1000)
-  return () => clearInterval(interval)
+  // Timers are throttled in background tabs; re-sync as soon as visible again.
+  document.addEventListener('visibilitychange', onTick)
+  window.addEventListener('focus', onTick)
+  window.addEventListener('pageshow', onTick)
+  return () => {
+    clearInterval(interval)
+    document.removeEventListener('visibilitychange', onTick)
+    window.removeEventListener('focus', onTick)
+    window.removeEventListener('pageshow', onTick)
+  }
 }
 
-function getNowSnapshot() {
+function getNowSnapshot(): number | null {
   return Math.floor(Date.now() / 1000) * 1000
 }
 
 /**
+ * The server (and static prerender at build time) must NOT bake in a "now":
+ * that HTML would be frozen at build time and shown stale in production.
+ * Returning null renders a neutral placeholder until the client takes over.
+ */
+function getServerSnapshot(): number | null {
+  return null
+}
+
+/**
  * Ticks down to a target date and returns the remaining time broken into
- * days/hours/minutes/seconds. Safe for SSR: the first render always reflects
- * the initial target/now so there is no hydration mismatch.
+ * days/hours/minutes/seconds. Safe for SSR: until the client mounts,
+ * `isReady` is false and the parts are placeholders (no stale build-time value).
  */
 export function useCountdown(
   target: string | Date | number,
@@ -98,11 +120,13 @@ export function useCountdown(
 
   // Whole-second snapshots keep the value stable between ticks, and React
   // re-syncs to the client value right after hydration.
-  const now = useSyncExternalStore(subscribeToSecondTicks, getNowSnapshot, getNowSnapshot)
+  const now = useSyncExternalStore(subscribeToSecondTicks, getNowSnapshot, getServerSnapshot)
 
-  const timeParts = getTimeParts(targetMs - now)
+  const isReady = now !== null
+  const timeParts = getTimeParts(isReady ? targetMs - now : Number.POSITIVE_INFINITY)
 
   useEffect(() => {
+    if (!isReady) return
     if (timeParts.isComplete && !firedRef.current) {
       firedRef.current = true
       onCompleteRef.current?.()
@@ -110,7 +134,7 @@ export function useCountdown(
     if (!timeParts.isComplete) {
       firedRef.current = false
     }
-  }, [timeParts.isComplete])
+  }, [isReady, timeParts.isComplete])
 
-  return timeParts
+  return { ...timeParts, isReady }
 }
